@@ -18,7 +18,7 @@ class Pizza extends CoreModel
     }
 
     public function connPizzaIngridients () {
-        return $this->hasMany(ConnPizzaIngridients::class, 'pizza_id', 'id')->with('ingridients');
+        return $this->hasMany(ConnPizzaIngridients::class, 'pizza_id', 'id');
     }
 
     public function ingridients () {

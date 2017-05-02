@@ -23,8 +23,8 @@ class PizzaController extends Controller
      * @return Response
      */
     public function index()
-    {return view('welcome');
-
+    {
+        return Pizza::orderBy('count','desc')->with(['connPizzaIngridients','ingridients'])->paginate(10);
     }
     public function createForm()
     {

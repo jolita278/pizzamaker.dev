@@ -12,9 +12,8 @@
 */
 
 
-Route::get('/', function(){
-    return view('makepizza');
-});
+Route::get('/',[
+    'uses' => 'PizzaController@index']);
 
 Route::get('/makepizza', [
     'uses' => 'PizzaController@createForm'
