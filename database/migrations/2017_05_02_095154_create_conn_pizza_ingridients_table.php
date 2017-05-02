@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateConnPizzaTable extends Migration {
+class CreateConnPizzaIngridientsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,12 @@ class CreateConnPizzaTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('conn_pizza', function(Blueprint $table)
+		Schema::create('conn_pizza_ingridients', function(Blueprint $table)
 		{
 			$table->integer('count', true);
 			$table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-			$table->string('pizza_type_id', 36)->index('fk_connection_pizza_type1_idx');
-			$table->string('ingridients_id', 36)->index('fk_connection_ingridients1_idx');
-			$table->string('cheese_id', 36)->index('fk_connection_cheese1_idx');
+			$table->string('pizza_id', 36)->index('fk_conn_pizza_ingridients_pizza1_idx');
+			$table->string('ingridients_id', 36)->index('fk_conn_pizza_ingridients_ingridients1_idx');
 		});
 	}
 
@@ -30,7 +29,7 @@ class CreateConnPizzaTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('conn_pizza');
+		Schema::drop('conn_pizza_ingridients');
 	}
 
 }
