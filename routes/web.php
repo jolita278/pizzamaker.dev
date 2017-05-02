@@ -11,6 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/', function(){
+    return view('makepizza');
 });
+
+Route::get('/makepizza', [
+    'uses' => 'PizzaController@createForm'
+]);
+Route::post('/makepizza', [
+    'as' => 'make-pizza',
+    'uses' => 'PizzaController@create'
+]);

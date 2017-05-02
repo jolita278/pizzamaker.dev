@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\model;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,11 +17,11 @@ class Pizza extends CoreModel
         return $this->hasOne(Cheese::class, 'id', 'cheese_id');
     }
 
-//    public function connPizzaIngridients () {
-//        return $this->hasMany(ConnPizzaIngridients::class, 'pizza_id', 'id')->with('ingridients');
-//    }
-//
-//    public function ingridients () {
-//        return $this->belongsToMany(Ingridients::class, 'conn_pizza_ingridients', 'pizza_id', 'ingridients_id');
-//    }
+    public function connPizzaIngridients () {
+        return $this->hasMany(ConnPizzaIngridients::class, 'pizza_id', 'id')->with('ingridients');
+    }
+
+    public function ingridients () {
+        return $this->belongsToMany(Ingridients::class, 'conn_pizza_ingridients', 'pizza_id', 'ingridients_id');
+    }
 }
