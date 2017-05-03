@@ -53,20 +53,35 @@ class PizzaController extends Controller
      */
     public function create()
     {
-        $config = 'Pasirinkote per daug ..';
         $data = request()->all();
+        if (sizeof($data['ingridient']) > 3)
+        {
+            $config = [];
+            $config['type'] = PizzaType::pluck('name', 'id')->toArray();
+            $config['cheese'] = Cheese::pluck('name', 'id')->toArray();
+            $config['ingridient'] = Ingridients::pluck('name', 'id')->toArray();
+            $config['error'] = ['id' => 'Klaida 00001', 'message' => 'Pasirinkta per daug ingridientų!'];
+            return view('makepizza',$config );
+        }
 
-        if ($data['cheese_id'] == 'default') $data['cheese_id'] = null;
+        elseif ($data['cheese_id'] == 'default') $data['cheese_id'] = null;
 
-            $record = Pizza::create(
+        $record = Pizza::create(
                 [
                     'type_id' => $data['type_id'],
                     'cheese_id' => $data['cheese_id'],
                     'contacts' => $data['contacts'],
                 ]
             );
-            $record->ingridients()->sync($data['ingridient']);
+        $record->ingridients()->sync($data['ingridient']);
 
+        $config = [];
+        $config['type'] = PizzaType::pluck('name', 'id')->toArray();
+        $config['cheese'] = Cheese::pluck('name', 'id')->toArray();
+        $config['ingridient'] = Ingridients::pluck('name', 'id')->toArray();
+        $config['record'] = $record;
+
+        return view('makepizza',$config );
     }
 
     /**

@@ -1,6 +1,21 @@
 <!DOCTYPE>
 <html>
 <body>
+
+@if(isset($record))
+    <div style="background:green; color:white"> Sėkmingai įrašyta!</div>
+@endif
+
+@if(isset($error))
+
+    @foreach($error as $err)
+        <div style="background:red; color:white"> {{$err}}!</div>
+        @endforeach
+
+@endif
+
+
+
 {!! Form::open(['url' => route('make-pizza')]) !!}
 <br>
 {{ Form::label('type_id','Pasirinkite picos padą') }}
@@ -10,7 +25,7 @@
 {{ Form::select('cheese_id',['default'=>'Pasirinkite..']+$cheese) }}<br><br>
 
 
-{{ Form::label('ingridient','Išsirinkite iki trijų ingridientų') }}<br>
+{{ Form::label('ingridient','Išsirinkite iki TRIJŲ ingridientų') }}<br>
 
 @foreach($ingridient as $key => $oneingridient)
     <label>
@@ -26,12 +41,12 @@
 
 <br>
 <br>
+
+
 {{ Form::submit('Patvirtinti') }}
 
 {!! Form::close() !!}
-@if(isset($ingridient))
-    <div style="background:red; color:white"> Pasirinkote per daug ingridientų! {{ $ingridient }}</div>
-@endif
+
 
 
 </body>
