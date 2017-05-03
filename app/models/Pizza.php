@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pizza extends CoreModel
 {
     protected $table = 'pizza';
-    protected $fillable = ['id', 'type_id', 'cheese_id'];
+    protected $fillable = ['id', 'type_id', 'cheese_id', 'contacts'];
 
     public function type() {
         return $this->hasOne(PizzaType::class, 'id', 'type_id');

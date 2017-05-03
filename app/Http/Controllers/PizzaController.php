@@ -13,6 +13,7 @@ use App\model\Cheese;
 use App\model\Ingridients;
 use App\model\Pizza;
 use App\model\PizzaType;
+use phpDocumentor\Reflection\Types\Null_;
 
 class PizzaController extends Controller
 {
@@ -24,15 +25,16 @@ class PizzaController extends Controller
      */
     public function index()
     {
-        return Pizza::orderBy('count','desc')->with(['connPizzaIngridients','ingridients'])->paginate(10);
+        return Pizza::orderBy('count', 'desc')->with(['connPizzaIngridients', 'ingridients'])->paginate(10);
     }
+
     public function createForm()
     {
         $config = [];
         $config['type'] = PizzaType::pluck('name', 'id')->toArray();
         $config['cheese'] = Cheese::pluck('name', 'id')->toArray();
         $config['ingridient'] = Ingridients::pluck('name', 'id')->toArray();
-        return view('makepizza',$config );
+        return view('makepizza', $config);
     }
 
     public function pickType()
@@ -51,14 +53,20 @@ class PizzaController extends Controller
      */
     public function create()
     {
+        $config = 'Pasirinkote per daug ..';
         $data = request()->all();
-        $record = Pizza::create(
-            [
-                'type_id' => $data['type_id'],
-                'cheese_id'=>$data['cheese_id'],
-            ]
-        );
-        $record->ingridients()->sync($data['ingridient']);
+
+        if ($data['cheese_id'] == 'default') $data['cheese_id'] = null;
+
+            $record = Pizza::create(
+                [
+                    'type_id' => $data['type_id'],
+                    'cheese_id' => $data['cheese_id'],
+                    'contacts' => $data['contacts'],
+                ]
+            );
+            $record->ingridients()->sync($data['ingridient']);
+
     }
 
     /**
@@ -76,7 +84,7 @@ class PizzaController extends Controller
      * Display the specified resource.
      * GET /pizza/{id}
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function show($id)
@@ -88,7 +96,7 @@ class PizzaController extends Controller
      * Show the form for editing the specified resource.
      * GET /pizza/{id}/edit
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function edit($id)
@@ -100,7 +108,7 @@ class PizzaController extends Controller
      * Update the specified resource in storage.
      * PUT /pizza/{id}
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function update($id)
@@ -112,7 +120,7 @@ class PizzaController extends Controller
      * Remove the specified resource from storage.
      * DELETE /pizza/{id}
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function destroy($id)

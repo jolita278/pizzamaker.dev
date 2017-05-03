@@ -7,10 +7,8 @@
 {{ Form::select('type_id',$type) }}<br>
 <br>
 {{ Form::label('cheese_id','Pasirinkite sūrio pagardą') }}
-{{ Form::select('cheese_id',$cheese) }}<br>
+{{ Form::select('cheese_id',['default'=>'Pasirinkite..']+$cheese) }}<br><br>
 
-
-<br>
 
 {{ Form::label('ingridient','Išsirinkite iki trijų ingridientų') }}<br>
 
@@ -23,11 +21,18 @@
 
 <br>
 <br>
+{{ Form::label('contacts', 'Nurodykite kontaktinę informaciją')}}<br>
+{{Form::text('contacts')}}
+
+<br>
+<br>
 {{ Form::submit('Patvirtinti') }}
 
 {!! Form::close() !!}
-@if(isset($name))
-    <div style="background:green; color:white"> Great success!! City was written to DB {{ $name }}</div>
+@if(isset($ingridient))
+    <div style="background:red; color:white"> Pasirinkote per daug ingridientų! {{ $ingridient }}</div>
 @endif
+
+
 </body>
 </html>
