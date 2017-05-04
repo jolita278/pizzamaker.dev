@@ -13,7 +13,6 @@ use App\model\Cheese;
 use App\model\Ingridients;
 use App\model\Pizza;
 use App\model\PizzaType;
-use phpDocumentor\Reflection\Types\Null_;
 
 class PizzaController extends Controller
 {
@@ -28,22 +27,27 @@ class PizzaController extends Controller
         return Pizza::orderBy('count', 'desc')->with(['connPizzaIngridients', 'ingridients'])->paginate(10);
     }
 
-    public function createForm()
+    public function getFormData()
     {
         $config = [];
-        $config['type'] = PizzaType::pluck('name', 'id')->toArray();
-        $config['cheese'] = Cheese::pluck('name', 'id')->toArray();
-        $config['ingridient'] = Ingridients::pluck('name', 'id')->toArray();
-        return view('makepizza', $config);
-    }
 
-    public function pickType()
-    {
-        $config = [];
-        $config['type'] = PizzaType::all();
-        return view('makepizza', $config);
-    }
+        $typeList = PizzaType::select('id', 'callories', 'name')->get()->toArray();
 
+        foreach ($typeList as $pizzatype)
+            $config['type'][$pizzatype['id']] = $pizzatype['name'] . ', ' . $pizzatype['callories'];
+
+        $cheeseList = Cheese::select('id', 'callories', 'name')->get()->toArray();
+
+        foreach ($cheeseList as $pizzacheese)
+            $config['cheese'][$pizzacheese['id']] = $pizzacheese['name'] . ', ' . $pizzacheese['callories'];
+
+        $ingridientsList = Ingridients::select('id', 'callories', 'name')->get()->toArray();
+
+        foreach ($ingridientsList as $pizzaingridient)
+            $config['ingridient'][$pizzaingridient['id']] = $pizzaingridient['name'] . ', ' . $pizzaingridient['callories'];
+
+        return $config;
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -53,35 +57,9 @@ class PizzaController extends Controller
      */
     public function create()
     {
-        $data = request()->all();
-        if (sizeof($data['ingridient']) > 3)
-        {
-            $config = [];
-            $config['type'] = PizzaType::pluck('name', 'id')->toArray();
-            $config['cheese'] = Cheese::pluck('name', 'id')->toArray();
-            $config['ingridient'] = Ingridients::pluck('name', 'id')->toArray();
-            $config['error'] = ['id' => 'Klaida 00001', 'message' => 'Pasirinkta per daug ingridientų!'];
-            return view('makepizza',$config );
-        }
+        $config = $this->getFormData();
 
-        elseif ($data['cheese_id'] == 'default') $data['cheese_id'] = null;
-
-        $record = Pizza::create(
-                [
-                    'type_id' => $data['type_id'],
-                    'cheese_id' => $data['cheese_id'],
-                    'contacts' => $data['contacts'],
-                ]
-            );
-        $record->ingridients()->sync($data['ingridient']);
-
-        $config = [];
-        $config['type'] = PizzaType::pluck('name', 'id')->toArray();
-        $config['cheese'] = Cheese::pluck('name', 'id')->toArray();
-        $config['ingridient'] = Ingridients::pluck('name', 'id')->toArray();
-        $config['record'] = $record;
-
-        return view('makepizza',$config );
+        return view('makepizza',$config);
     }
 
     /**
@@ -92,7 +70,36 @@ class PizzaController extends Controller
      */
     public function store()
     {
-        //
+
+        $data = request()->all();
+
+        if (sizeof($data['ingridient']) > 3) {
+
+            $config = $this->getFormData();
+
+            $config['error'] = ['id' => 'Klaida 00001', 'message' => 'Pasirinkta per daug ingridientų!'];
+
+            return view('makepizza', $config);
+        }
+
+        elseif ($data['cheese_id'] == 'default') $data['cheese_id'] = null;
+
+        $record = Pizza::create(
+            [
+                'type_id' => $data['type_id'],
+                'cheese_id' => $data['cheese_id'],
+                'contacts' => $data['contacts'],
+            ]
+        );
+
+        $record->ingridients()->sync($data['ingridient']);
+
+        $config = $this->getFormData();
+
+
+        $config['success_message'] = ['id' => 'Sėkmingai įrašyta į DB ', 'message' => 'Kontaktinė informacija -  '. $data['contacts']];
+
+        return view('makepizza', $config);
     }
 
     /**

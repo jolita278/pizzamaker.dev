@@ -2,8 +2,11 @@
 <html>
 <body>
 
-@if(isset($record))
-    <div style="background:green; color:white"> Sėkmingai įrašyta!</div>
+@if(isset($success_message))
+
+    @foreach($success_message as $message)
+        <div style="background:green; color:white"> {{$message}}!</div>
+    @endforeach
 @endif
 
 @if(isset($error))
@@ -18,6 +21,7 @@
 
 {!! Form::open(['url' => route('make-pizza')]) !!}
 <br>
+
 {{ Form::label('type_id','Pasirinkite picos padą') }}
 {{ Form::select('type_id',$type) }}<br>
 <br>

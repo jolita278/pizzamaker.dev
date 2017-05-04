@@ -11,14 +11,11 @@
 |
 */
 
+Route::group(['prefix' => 'pizza'], function() {
 
-Route::get('/',[
-    'uses' => 'PizzaController@index']);
+    Route::get('/',['uses' => 'PizzaController@index']);
 
-Route::get('/makepizza', [
-    'uses' => 'PizzaController@createForm'
-]);
-Route::post('/makepizza', [
-    'as' => 'make-pizza',
-    'uses' => 'PizzaController@create'
-]);
+    Route::get('/make', ['uses' => 'PizzaController@create']);
+
+    Route::post('/make', ['as' => 'make-pizza','uses' => 'PizzaController@store']);
+});
