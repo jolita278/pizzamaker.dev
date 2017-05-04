@@ -77,19 +77,23 @@ class PizzaController extends Controller
     {
         $data = request()->all();
 
-        if (sizeof($data['ingridient']) > 3) {
+        $contacts = $data['contacts'];
+
+        if (isset($data['ingridient']) && sizeof($data['ingridient']) > 3) {
 
             $config = $this->getFormData();
 
             $config['error'] = ['id' => 'Klaida 00001', 'message' => 'Pasirinkta per daug ingridientų!'];
 
             return view('makepizza', $config);
-        } elseif ($data['contacts'] == null) {
+
+        } elseif ($contacts == null) {
             $config = $this->getFormData();
 
             $config['error'] = ['id' => 'Klaida 00002', 'message' => 'Neįrašyti kontaktiniai duomenys!'];
 
             return view('makepizza', $config);
+
         } elseif ($data['cheese_id'] == 'default') $data['cheese_id'] = null;
 
         $record = Pizza::create(
@@ -104,10 +108,7 @@ class PizzaController extends Controller
 
         $config = $this->getFormData();
 
-        // $config = array_merge($config, $record->toArray());
-
-        //dd($config);
-        $config['success_message'] = ['id' => 'Sėkmingai įrašyta į DB ', 'message' => 'Kontaktinė informacija -  ' . $data['contacts']];
+        $config['success_message'] = ['id' => 'Užsakymas priimtas! ', 'message' => 'Kontaktinė informacija -  ' . $data['contacts']];
 
         return view('makepizza', $config);
     }

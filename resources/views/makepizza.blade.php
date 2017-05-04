@@ -17,8 +17,6 @@
 
 @endif
 
-
-
 {!! Form::open(['url' => route('make-pizza')]) !!}
 <br>
 
@@ -45,12 +43,9 @@
 <br>
 <br>
 
-
 {{ Form::submit('Patvirtinti') }}
 
 {!! Form::close() !!}
-
-
 
 </body>
 </html>
