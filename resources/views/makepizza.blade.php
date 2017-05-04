@@ -32,10 +32,9 @@
 {{ Form::label('ingridient','Išsirinkite iki TRIJŲ ingridientų') }}<br>
 
 @foreach($ingridient as $key => $oneingridient)
-    <label>
+
         {{ Form::checkbox('ingridient[]', $key) }}
-        {{$oneingridient}}
-    </label><br>
+        {{$oneingridient}}<br>
 @endforeach
 
 <br>
