@@ -13,7 +13,7 @@
 
     @foreach($error as $err)
         <div style="background:red; color:white"> {{$err}}!</div>
-        @endforeach
+    @endforeach
 
 @endif
 
@@ -21,24 +21,29 @@
 <br>
 
 {{ Form::label('type_id','Pasirinkite picos padą') }}
-{{ Form::select('type_id',$type) }}<br>
+{{ Form::select('type_id',$type,['id' => $item['type']['id']]) }}<br>
 <br>
 {{ Form::label('cheese_id','Pasirinkite sūrio pagardą') }}
-{{ Form::select('cheese_id',['default'=>'Pasirinkite..']+$cheese) }}<br><br>
+{{ Form::select('cheese_id',['default'=>'Pasirinkite..']+$cheese, ['id' => $item['cheese']['id']]) }}<br><br>
 
 
 {{ Form::label('ingridient','Išsirinkite iki TRIJŲ ingridientų') }}<br>
 
 @foreach($ingridient as $key => $oneingridient)
 
-        {{ Form::checkbox('ingridient[]', $key) }}
-        {{$oneingridient}}<br>
+    @if(in_array($key, $ingridientsItems))
+        {{ Form::checkbox('ingridient[]', $key, true)}}
+    @else()
+        {{ Form::checkbox('ingridient[]', $key)}}
+    @endif()
+    {{$oneingridient}}<br>
+        
 @endforeach
 
 <br>
 <br>
 {{ Form::label('contacts', 'Nurodykite kontaktinę informaciją')}}<br>
-{{Form::text('contacts')}}
+{{ Form::text('contacts',$item['contacts'])}}
 
 <br>
 <br>

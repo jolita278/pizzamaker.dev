@@ -24,8 +24,11 @@ class PizzaController extends Controller
      */
     public function index()
     {
-        return Pizza::orderBy('count', 'desc')->with(['connPizzaIngridients', 'ingridients'])->paginate(10);
+        $config = [];
+        $config['list'] = Pizza::with(['type', 'cheese', 'connPizzaIngridients'])->get()->toArray();
+        return view('madedPizzas', $config);
     }
+
 
     /**
      * Get data to Form for labels
@@ -118,11 +121,11 @@ class PizzaController extends Controller
      * GET /pizza/{id}
      *
      * @param  int $id
-     * @return Response
+     * @return mixed
      */
     public function show($id)
     {
-        //
+        return Pizza::with(['connPizzaIngridients', 'cheese', 'type'])->find($id);
     }
 
     /**
@@ -130,11 +133,18 @@ class PizzaController extends Controller
      * GET /pizza/{id}/edit
      *
      * @param  int $id
-     * @return Response
+     * @return mixed
      */
     public function edit($id)
     {
-        //
+        $config = $this->getFormData();
+        $config['item'] = Pizza::with(['connPizzaIngridients', 'cheese', 'type'])->find($id);
+
+        $config['ingridientsItems'] = $config['item']->connPizzaIngridients->pluck('ingridients_id')->toArray();
+        $config['item'] = $config['item']->toArray();
+
+        return view('editpizza', $config);
+
     }
 
     /**
@@ -142,11 +152,11 @@ class PizzaController extends Controller
      * PUT /pizza/{id}
      *
      * @param  int $id
-     * @return Response
+     * @return mixed
      */
     public function update($id)
     {
-        //
+        return Pizza::with(['connPizzaIngridients', 'cheese', 'type'])->find($id);
     }
 
     /**

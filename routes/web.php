@@ -11,11 +11,21 @@
 |
 */
 
-Route::group(['prefix' => 'pizza'], function() {
+Route::group(['prefix' => 'pizza'], function () {
 
-    Route::get('/',['uses' => 'PizzaController@index']);
+    Route::get('/', ['uses' => 'PizzaController@index']);
 
     Route::get('/make', ['uses' => 'PizzaController@create']);
 
-    Route::post('/make', ['as' => 'make-pizza','uses' => 'PizzaController@store']);
+    Route::post('/make', ['as' => 'store-pizza', 'uses' => 'PizzaController@store']);
+
+    Route::group(['prefix' => '{id}'], function () {
+
+        Route::get('/', ['uses' => 'PizzaController@show']);
+
+        Route::get('/edit', ['uses' => 'PizzaController@edit']);
+
+        Route::post('/edit', ['as' => 'update-pizza', 'uses' => 'PizzaController@update']);
+
+    });
 });
